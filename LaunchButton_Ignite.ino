@@ -1,7 +1,12 @@
+#include <Wire.h>
 #include <SPI.h>
 #include "RF24.h"  //Library for the transciever
+#include <Adafruit_NeoPixel.h>
+#define PIN 9
+Adafruit_NeoPixel pixel = Adafruit_NeoPixel(4, PIN, NEO_GRB + NEO_KHZ800);
 
-const int LED =  3;  // LED or ignitor 
+const int NeoPixel = 9;
+const int LED =  5;  // LED or ignitor 
 const int Ready = 4; // Use this for an LED that will glow when it's turned on, so I know it's armed. 
 bool radioNumber = 0; // Channel for the radio
 RF24 radio(9,10);     // clock and data pins for the transciever
@@ -13,6 +18,8 @@ void setup() {
   Serial.begin(115200);
   pinMode(LED, OUTPUT);
   pinMode(Ready, OUTPUT);
+  pixel.begin();
+  pixel.show(); // Initialize all pixels to 'off'
   radio.begin();
   
   radio.setChannel(108);
@@ -37,10 +44,38 @@ void loop() {
         digitalWrite(LED, LOW);
         dataReceived = 0; 
       }
+      if (dataReceived == 2){
+        BluePixel();
+        delay(200);
+         BluePixel();
+        delay(400);
+        OffPixel();
+        dataReceived = 0; 
+      }
+      
       //Serial.print("Data received = ");
      //Serial.println(dataReceived);
     }       
 }
 
+void RedPixel(){
+  pixel.setPixelColor(0, pixel.Color(25,0,0));
+  pixel.show();
+}
+
+void BluePixel(){
+  pixel.setPixelColor(0, pixel.Color(0,0,25));
+  pixel.show();
+}
+
+void YellowPixel(){
+  pixel.setPixelColor(0, pixel.Color(25,20,0));
+  pixel.show();
+}
+
+void OffPixel(){
+  pixel.setPixelColor(0, pixel.Color(0,0,0));
+  pixel.show();
+}
 
 
