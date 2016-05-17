@@ -15,7 +15,7 @@ byte addresses[][6] = {"1Node","2Node"};
 int dataReceived;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   pinMode(LED, OUTPUT);
   pinMode(Ready, OUTPUT);
   pixel.begin();
@@ -35,26 +35,28 @@ void loop() {
   if (radio.available()) // Check for incoming data from transmitter
     {
       while (radio.available())  // While there is data ready
-      {
-        radio.read( &dataReceived, sizeof(dataReceived) ); // Get the data payload (You must have defined that already!)
-      }
+        {
+          radio.read( &dataReceived, sizeof(dataReceived) ); // Get the data payload (You must have defined that already!)
+        }
       if (dataReceived == 1){
-        digitalWrite(LED, HIGH);
-        delay(700);
-        digitalWrite(LED, LOW);
-        dataReceived = 0; 
-      }
+          digitalWrite(LED, HIGH);
+          delay(700);
+          digitalWrite(LED, LOW);
+          dataReceived = 0; 
+        }
       if (dataReceived == 2){
-        BluePixel();
-        delay(200);
-         BluePixel();
-        delay(400);
-        OffPixel();
-        dataReceived = 0; 
-      }
-      
-      //Serial.print("Data received = ");
-     //Serial.println(dataReceived);
+          BluePixel();
+          delay(150);
+          
+          OffPixel();
+          delay(150);
+        
+          BluePixel();
+          delay(150);
+          
+          OffPixel();
+          dataReceived = 0; 
+        }
     }       
 }
 
