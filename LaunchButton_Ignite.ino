@@ -7,7 +7,6 @@ Adafruit_NeoPixel pixel = Adafruit_NeoPixel(4, PIN, NEO_GRB + NEO_KHZ800);
 
 const int NeoPixel = 9;
 const int LED =  5;  // LED or ignitor 
-const int Ready = 4; // Use this for an LED that will glow when it's turned on, so I know it's armed. 
 bool radioNumber = 0; // Channel for the radio
 RF24 radio(9,10);     // clock and data pins for the transciever
 
@@ -17,7 +16,6 @@ int dataReceived;
 void setup() {
   Serial.begin(9600);
   pinMode(LED, OUTPUT);
-  pinMode(Ready, OUTPUT);
   pixel.begin();
   pixel.show(); // Initialize all pixels to 'off'
   radio.begin();
@@ -30,7 +28,7 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(Ready, HIGH); 
+  GreenPixel();
   
   if (radio.available()) // Check for incoming data from transmitter
     {
@@ -40,8 +38,11 @@ void loop() {
         }
       if (dataReceived == 1){
           digitalWrite(LED, HIGH);
-          delay(700);
+          RedPixel();
+          delay(5000);
+          
           digitalWrite(LED, LOW);
+          OffPixel();
           dataReceived = 0; 
         }
       if (dataReceived == 2){
@@ -56,6 +57,7 @@ void loop() {
           
           OffPixel();
           dataReceived = 0; 
+          delay(200);
         }
     }       
 }
@@ -72,6 +74,11 @@ void BluePixel(){
 
 void YellowPixel(){
   pixel.setPixelColor(0, pixel.Color(25,20,0));
+  pixel.show();
+}
+
+void GreenPixel(){
+  pixel.setPixelColor(0, pixel.Color(0,25,0));
   pixel.show();
 }
 
