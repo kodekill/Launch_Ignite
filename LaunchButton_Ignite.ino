@@ -7,6 +7,7 @@ Adafruit_NeoPixel pixel = Adafruit_NeoPixel(4, PIN, NEO_GRB + NEO_KHZ800);
 
 const int NeoPixel = 9;
 const int LED =  5;  // LED or ignitor 
+const int LED2 = 6; 
 bool radioNumber = 0; // Channel for the radio
 RF24 radio(9,10);     // clock and data pins for the transciever
 
@@ -16,6 +17,7 @@ int dataReceived;
 void setup() {
   Serial.begin(9600);
   pinMode(LED, OUTPUT);
+  pinMode(LED2, OUTPUT);
   pixel.begin();
   pixel.show(); // Initialize all pixels to 'off'
   radio.begin();
@@ -38,10 +40,12 @@ void loop() {
         }
       if (dataReceived == 1){
           digitalWrite(LED, HIGH);
+          digitalWrite(LED2,HIGH);
           RedPixel();
           delay(5000);
           
           digitalWrite(LED, LOW);
+          digitalWrite(LED2,LOW);
           OffPixel();
           dataReceived = 0; 
         }
